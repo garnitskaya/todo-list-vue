@@ -10,15 +10,13 @@
       <input
         class="list-item__check form-check-input"
         type="checkbox"
-        :value="done"
-        :checked="item.done"
-        @change="$emit('update:done', !item.done)"
+        v-model="item.done"
       />
 
       <span
-        :value="important"
-        class="list-item__text"
-        @click="$emit('update:important', !item.important)"
+        :title="item.label"
+        :class="['list-item__text', { active }]"
+        @click="active = !active"
       >
         {{ item.label }}
       </span>
@@ -28,6 +26,7 @@
       <button
         class="btn btn-star"
         type="button"
+        @click="item.important = !item.important"
       >
         <i class="star fas fa-star"></i>
       </button>
@@ -50,8 +49,11 @@ export default {
       type: Object,
       required: true,
     },
-    done: { type: Boolean },
-    important: { type: Boolean },
+  },
+  data() {
+    return {
+      active: false,
+    }
   },
 }
 </script>
@@ -71,11 +73,22 @@ export default {
     vertical-align: middle;
   }
   &__text {
+    display: inline-block;
     height: 100%;
     font-size: 20px;
     vertical-align: middle;
     transition: 0.5s all;
     cursor: pointer;
+
+    width: 440px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .active {
+    height: 100%;
+    white-space: unset;
+    overflow: visible;
   }
   &__check {
     margin-right: 12px;
@@ -93,8 +106,7 @@ export default {
       transition: 0.5s all;
     }
     .btn-star .star {
-      opacity: 1;
-      transform: translateX(0);
+      color: #ffd700;
     }
   }
 
@@ -116,20 +128,37 @@ export default {
   .btn-trash .trash {
     font-size: 20px;
     color: #e5383b;
-  }
-
-  .btn-trash .trash:hover,
-  .btn-trash .trash:active {
-    transform: rotate(720deg);
     transition: 1s all;
+
+    &:hover,
+    &:active {
+      transform: rotate(720deg);
+    }
   }
 
   .btn-star .star {
     font-size: 20px;
-    color: #ffd700;
-    transform: translateX(30px);
+    color: rgba(32, 201, 151, 0.3);
     transition: 0.5s all;
-    opacity: 0;
+
+    &:hover,
+    &:active {
+      transform: scale(1.2);
+    }
+  }
+}
+@media (max-width: 768px) {
+  .list-item {
+    &__text {
+      width: 340px;
+    }
+  }
+}
+@media (max-width: 570px) {
+  .list-item {
+    &__text {
+      width: 240px;
+    }
   }
 }
 </style>

@@ -2,10 +2,7 @@
   <div class="item-filter d-flex">
     <button
       :value="filter"
-      :class="{
-        'btn-filter__active': filter === button.name,
-      }"
-      class="btn"
+      :class="['btn', { 'btn-filter__active': filter === button.name }]"
       v-for="button of buttons"
       :key="button.name"
       type="button"
